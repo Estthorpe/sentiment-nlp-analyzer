@@ -1,0 +1,18 @@
+
+# Virtual env & python cache
+.venv/
+__pycache__/
+*.pyc
+
+# Environment
+.env
+
+# Data & artifacts (kept local)
+data/
+models/
+mlruns/
+logs/
+*.log
+
+# Notebooks
+.ipynb_checkpoints/
