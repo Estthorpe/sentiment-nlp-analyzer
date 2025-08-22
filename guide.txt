@@ -1,0 +1,55 @@
+
+# Sentiment NLP Analyzer — Setup Guide
+
+Prereqs:
+- Windows PowerShell, Python 3.10+
+- Git, (optional) Git LFS if you want to version large model files
+- Kaggle dataset downloaded to data/raw/
+
+1) Clone or open the folder
+   cd sentiment-nlp-analyzer
+
+2) Create and activate virtual env (Windows)
+   py -3.10 -m venv .venv
+   .\.venv\Scripts\Activate
+
+3) Install dependencies
+   pip install -r requirements.txt
+
+4) Prepare data
+   python utils\data_prep.py --in data\raw\amazon_reviews.csv --out data\processed
+   # outputs: reviews.csv, train.csv, val.csv, test.csv
+
+5) Train models
+   python train_baseline.py
+   python train_xgb.py                 # optional
+   python train_transformer.py
+
+6) Inspect runs with MLflow
+   python -m mlflow ui --backend-store-uri mlruns --port 5500
+   # open http://127.0.0.1:5500
+
+7) Generate explainability images
+   python batch_explain.py --n 20 --seed 42
+
+8) Launch the app
+   streamlit run app\streamlit_app.py
+
+9) Common hiccups
+   - If PowerShell says 'mlflow not recognized':
+       python -m mlflow ui --backend-store-uri mlruns
+   - If Streamlit says "No module named 'utils'":
+       run from project root:  streamlit run app\streamlit_app.py
+   - If LIME OOM with transformer:
+       lower LIME samples (sidebar), or run batch_explain with --max_len 96
+
+10) Ship to GitHub
+   git add .
+   git commit -m "feat: v1 app + models + docs"
+   git branch -M main
+   git remote add origin https://github.com/<your-username>/sentiment-nlp-analyzer.git
+   git push -u origin main
+
+11) Tag a release
+   git tag -a v1.0.0 -m "v1.0.0: baseline + transformer + app + explanations"
+   git push origin v1.0.0

@@ -16,3 +16,11 @@ logs/
 
 # Notebooks
 .ipynb_checkpoints/
+.venv/
+__pycache__/
+.ipynb_checkpoints/
+mlruns/
+data/raw/
+data/processed/*.csv
+models/transformer/*
+models/*/*.bin
